@@ -1,5 +1,6 @@
-// Vercel serverless entry point (CommonJS).
-// .cjs extension forces Node to treat this as CJS regardless of root "type":"module".
+// Vercel serverless entry point — pure CommonJS.
+// Root package.json no longer has "type":"module" so .cjs and .js
+// files are both treated as CommonJS by Node and Vercel.
 const { app, connectDB } = require('../server/index');
 
 connectDB();
