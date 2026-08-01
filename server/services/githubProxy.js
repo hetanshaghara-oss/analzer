@@ -19,8 +19,8 @@ function getHeaders(accessToken) {
     "User-Agent": "GitInsightAI-Backend",
   };
 
-  const cleanAccessToken = accessToken ? String(accessToken).trim() : null;
-  const cleanGlobalToken = GITHUB_TOKEN ? String(GITHUB_TOKEN).trim() : null;
+  const cleanAccessToken = accessToken ? String(accessToken).trim().split(/\s+/)[0] : null;
+  const cleanGlobalToken = GITHUB_TOKEN ? String(GITHUB_TOKEN).trim().split(/\s+/)[0] : null;
 
   if (cleanAccessToken) {
     headers.Authorization = `Bearer ${cleanAccessToken}`;
