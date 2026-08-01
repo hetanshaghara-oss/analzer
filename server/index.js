@@ -1,10 +1,12 @@
 // Force Google DNS to bypass ISP/hotspot DNS that blocks MongoDB Atlas SRV records.
-// Best-effort: serverless runtimes may not allow changing DNS servers.
-const dns = require("dns");
-try {
-  dns.setServers(["8.8.8.8", "8.8.4.4", "1.1.1.1"]);
-} catch {
-  /* ignored */
+// Best-effort: serverless runtimes may not allow changing DNS servers, and doing so on Vercel breaks DNS lookups.
+if (!process.env.VERCEL) {
+  const dns = require("dns");
+  try {
+    dns.setServers(["8.8.8.8", "8.8.4.4", "1.1.1.1"]);
+  } catch {
+    /* ignored */
+  }
 }
 
 const path = require("path");

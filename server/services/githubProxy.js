@@ -19,10 +19,13 @@ function getHeaders(accessToken) {
     "User-Agent": "GitInsightAI-Backend",
   };
 
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  } else if (GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+  const cleanAccessToken = accessToken ? String(accessToken).trim() : null;
+  const cleanGlobalToken = GITHUB_TOKEN ? String(GITHUB_TOKEN).trim() : null;
+
+  if (cleanAccessToken) {
+    headers.Authorization = `Bearer ${cleanAccessToken}`;
+  } else if (cleanGlobalToken) {
+    headers.Authorization = `Bearer ${cleanGlobalToken}`;
   }
 
   return headers;
