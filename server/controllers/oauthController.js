@@ -10,7 +10,7 @@ const {
 const { storeState, consumeState } = require("../services/oauthState");
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-const OAUTH_CODE_TTL = 60 * 1000; // one-time frontend exchange codes live 60s
+const OAUTH_CODE_TTL = 10 * 60 * 1000; // one-time frontend exchange codes live 10 min (matches the state TTL)
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign(

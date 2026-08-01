@@ -88,6 +88,16 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
+// Wait for the database before handling API requests. Prevents Mongoose's
+// query buffering from timing out with cryptic errors (e.g.
+// "operation.find() buffering timed out after 10000ms") on cold serverless
+// instances whose first connection attempt is still in flight or failed.
+app.use("/api", async (req, res, next) => {
+  const connected = await connectDB();
+  if (connected) return next();
+  res.status(503).json({ message: "Database is warming up. Please try again." });
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/oauth", oauthRoutes);
@@ -134,17 +144,36 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message || "Internal server error." });
 });
 
-// Idempotent MongoDB connection — reused across warm serverless invocations.
+// MongoDB connection, shared across warm serverless invocations.
+//
+// Promise-based and retryable: `connectDB()` returns the same in-flight promise
+// for every concurrent request, and resets it on failure so the next request
+// makes a fresh attempt. It never rejects — callers get `true` if the DB is
+// ready and `false` otherwise — so fire-and-forget warm-up calls (api/index.js)
+// can't produce unhandled promise rejections. Without all this, a cold Vercel
+// instance whose first connection attempt fails (or is slow) would buffer every
+// DB query for 10s and then fail with "operation.find() buffering timed out
+// after 10000ms".
+let dbConnectionPromise = null;
+
 async function connectDB() {
-  if (mongoose.connection.readyState === 1) return;
-  try {
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
-    });
-    console.log("✅ MongoDB connected successfully to", MONGODB_URI);
-  } catch (err) {
-    console.warn("⚠️ MongoDB connection warning:", err.message);
+  if (mongoose.connection.readyState === 1) return true;
+  if (!dbConnectionPromise) {
+    dbConnectionPromise = mongoose
+      .connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 10000,
+        bufferCommands: false,
+      })
+      .then(() => {
+        console.log("✅ MongoDB connected successfully to", MONGODB_URI);
+      })
+      .catch((err) => {
+        console.warn("⚠️ MongoDB connection warning:", err.message);
+        dbConnectionPromise = null; // allow a retry on the next request
+      });
   }
+  await dbConnectionPromise;
+  return mongoose.connection.readyState === 1;
 }
 
 // Standalone run (node server/index.js): start the server. When this file is

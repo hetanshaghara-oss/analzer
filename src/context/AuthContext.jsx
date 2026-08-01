@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
       return text ? JSON.parse(text) : {};
     } catch {
       return {
-        message: `Backend server error (${res.status}). Ensure backend is running at http://localhost:3001.`,
+        message: `Backend server error (${res.status}). Please try again.`,
       };
     }
   };
