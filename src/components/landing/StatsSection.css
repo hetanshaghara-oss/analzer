@@ -1,0 +1,99 @@
+/* ─────────────── STATS ─────────────── */
+.stats-section {
+  position: relative;
+  padding: 7rem 0;
+  overflow: hidden;
+}
+
+.stats-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, hsl(var(--accent-primary) / 0.08), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 85% 60%, hsl(var(--color-purple) / 0.07), transparent 70%);
+  pointer-events: none;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  position: relative;
+}
+
+.stats-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: hsl(var(--accent-primary));
+  margin-bottom: 1rem;
+}
+
+.stats-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: hsl(var(--text-primary));
+  line-height: 1.12;
+}
+
+.stats-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.stat-cell {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border-radius: var(--radius-2xl);
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary) / 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 50px -30px rgba(15, 23, 42, 0.2);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.landing-page .stat-cell:hover {
+  transform: translateY(-4px);
+  border-color: hsl(var(--accent-primary) / 0.35);
+  box-shadow: 0 30px 60px -30px hsl(var(--accent-primary) / 0.35);
+}
+
+.stat-number {
+  display: block;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: hsl(var(--text-primary));
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.75rem;
+}
+
+.stat-number em {
+  font-style: normal;
+  background: linear-gradient(120deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

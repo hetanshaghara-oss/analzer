@@ -1,0 +1,228 @@
+/* Portfolio Template Theme Variables */
+.theme-sleek-dark {
+  --port-bg: #0f172a;
+  --port-card-bg: #1e293b;
+  --port-border: #334155;
+  --port-text-main: #f8fafc;
+  --port-text-sec: #94a3b8;
+  --port-accent: #3b82f6;
+  --port-accent-hover: #60a5fa;
+  --port-font: 'Inter', sans-serif;
+}
+
+.theme-cyberpunk {
+  --port-bg: #0c0f12;
+  --port-card-bg: #141a21;
+  --port-border: #ff007f;
+  --port-text-main: #00ffff;
+  --port-text-sec: #8c9ba5;
+  --port-accent: #ff007f;
+  --port-accent-hover: #ff66b2;
+  --port-font: monospace;
+}
+
+.theme-minimal-light {
+  --port-bg: #ffffff;
+  --port-card-bg: #f8fafc;
+  --port-border: #e2e8f0;
+  --port-text-main: #0f172a;
+  --port-text-sec: #475569;
+  --port-accent: #0f172a;
+  --port-accent-hover: #334155;
+  --port-font: 'Outfit', 'Inter', sans-serif;
+}
+
+/* Portfolio Render Box */
+.portfolio-preview-frame {
+  background-color: var(--port-bg);
+  color: var(--port-text-main);
+  font-family: var(--port-font);
+  min-height: 100%;
+  transition: all var(--transition-normal);
+}
+
+.portfolio-hero {
+  padding: 6rem 2rem 4rem;
+  text-align: center;
+  border-bottom: 1px solid var(--port-border);
+}
+
+.portfolio-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.portfolio-hero-sub {
+  font-size: 1.5rem;
+  color: var(--port-text-sec);
+  margin-bottom: 2rem;
+}
+
+.portfolio-section {
+  padding: 4rem 2rem;
+  border-bottom: 1px solid var(--port-border);
+}
+
+.portfolio-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--port-accent);
+}
+
+/* Project Cards Grid */
+.portfolio-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .portfolio-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.portfolio-project-card {
+  background-color: var(--port-card-bg);
+  border: 1px solid var(--port-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.portfolio-project-card:hover {
+  border-color: var(--port-accent);
+}
+
+/* Skills category list */
+.portfolio-skills-category {
+  margin-bottom: 2rem;
+}
+
+.portfolio-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.portfolio-skill-tag {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--port-card-bg);
+  border: 1px solid var(--port-border);
+  border-radius: var(--radius-full);
+  color: var(--port-text-sec);
+}
+
+/* Resume Template Styling */
+.resume-preview-frame {
+  background-color: white;
+  color: #111;
+  font-family: 'Inter', sans-serif;
+  padding: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  min-height: 1056px; /* standard ratio */
+}
+
+.resume-header {
+  border-bottom: 2px solid #222;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.resume-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.resume-subtitle {
+  font-size: 1.125rem;
+  color: #555;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+.resume-section {
+  margin-bottom: 1.5rem;
+}
+
+.resume-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.resume-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.resume-experience-desc {
+  font-size: 0.875rem;
+  color: #444;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.resume-lang-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #f1f5f9;
+  color: #334155;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Page break helpers (used by html2pdf.js) ── */
+.resume-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.resume-header {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+/* Print Overrides for Resume View (legacy browser-print fallback) */
+@media print {
+  .print-hide { display: none !important; }
+  .resume-preview-frame {
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: white !important;
+    color: black !important;
+  }
+  .resume-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,310 @@
+/* ══════════════════════════════════════
+   REPO EXPLORER — premium repository list
+══════════════════════════════════════ */
+
+.repo-explorer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Toolbar ── */
+.repo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  box-shadow: var(--shadow-card);
+}
+
+.repo-toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.repo-toolbar-title h2 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: hsl(var(--text-primary));
+}
+
+.repo-toolbar-count {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repo-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.repo-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  min-width: 200px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-secondary) / 0.5);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.repo-search:focus-within {
+  border-color: hsl(var(--accent-primary));
+  background: hsl(var(--bg-primary));
+  box-shadow: 0 0 0 4px hsl(var(--accent-primary) / 0.12);
+}
+
+.repo-search svg {
+  color: hsl(var(--text-muted));
+  flex-shrink: 0;
+}
+
+.repo-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.9rem;
+  color: hsl(var(--text-primary));
+}
+
+.repo-search input::placeholder {
+  color: hsl(var(--text-muted));
+}
+
+.repo-search-clear {
+  font-size: 1.1rem;
+  line-height: 1;
+  color: hsl(var(--text-muted));
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.repo-search-clear:hover {
+  background: hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+}
+
+.repo-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-secondary) / 0.5);
+  color: hsl(var(--text-muted));
+}
+
+.repo-select-wrap select {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+  cursor: pointer;
+  appearance: none;
+  padding-right: 4px;
+}
+
+/* ── Grid ── */
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.1rem;
+}
+
+@media (min-width: 768px) {
+  .repo-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .repo-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.repo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.4rem;
+}
+
+.repo-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.repo-name {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: hsl(var(--accent-primary));
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.repo-name:hover {
+  text-decoration: underline;
+}
+
+.repo-visibility {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.repo-visibility--public {
+  background: hsl(var(--color-green) / 0.12);
+  color: hsl(var(--color-green));
+}
+
+.repo-visibility--private {
+  background: hsl(var(--color-red) / 0.1);
+  color: hsl(var(--color-red));
+}
+
+.repo-description {
+  font-size: 0.88rem;
+  color: hsl(var(--text-secondary));
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.repo-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.repo-topic {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: hsl(var(--accent-primary) / 0.08);
+  color: hsl(var(--accent-primary));
+}
+
+.repo-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  color: hsl(var(--text-secondary));
+  font-size: 0.76rem;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.repo-ai:hover {
+  border-color: hsl(var(--accent-primary) / 0.4);
+  background: hsl(var(--accent-primary) / 0.08);
+  color: hsl(var(--accent-primary));
+  transform: translateY(-1px);
+}
+
+/* Meta row */
+.repo-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid hsl(var(--border-color));
+  font-size: 0.8rem;
+  color: hsl(var(--text-secondary));
+  flex-wrap: wrap;
+}
+
+.repo-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.repo-meta-item svg {
+  color: hsl(var(--text-muted));
+}
+
+.repo-meta-link {
+  margin-left: auto;
+  color: hsl(var(--text-muted));
+}
+
+.repo-meta-link:hover {
+  color: hsl(var(--accent-primary));
+}
+
+/* Empty state */
+.repo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1.5rem;
+  border: 2px dashed hsl(var(--border-color));
+  border-radius: 18px;
+  color: hsl(var(--text-muted));
+}
+
+.repo-empty p {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .repo-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .repo-search {
+    width: 100%;
+    min-width: 0;
+  }
+}

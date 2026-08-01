@@ -1,0 +1,316 @@
+.dna-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Hero Card */
+.dna-hero-card {
+  width: 100%;
+}
+
+.dna-hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.5rem 3rem;
+  flex-wrap: wrap;
+}
+
+.dna-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.dna-icon-box {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1rem;
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 30px rgba(139,92,246,0.3);
+}
+
+.dna-section-micro {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8b5cf6;
+  margin-bottom: 0.25rem;
+}
+
+.dna-hero-name {
+  font-size: 2rem;
+  font-weight: 900;
+  color: hsl(var(--text-primary));
+  margin: 0;
+}
+
+.dna-hero-login {
+  color: hsl(var(--text-secondary));
+  font-size: 1rem;
+}
+
+/* Score Ring */
+.dna-hero-score-wrap {
+  flex-shrink: 0;
+}
+
+.dna-score-ring {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.dna-score-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dna-score-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dna-score-num {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+}
+
+.dna-score-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: hsl(var(--text-muted));
+}
+
+/* Grid */
+.dna-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 2rem;
+}
+
+.dna-card {
+  height: 100%;
+}
+
+.dna-card-inner {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dna-card-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: hsl(var(--text-primary));
+  margin: 0.25rem 0 1.5rem;
+}
+
+.dna-card-sub {
+  font-size: 0.95rem;
+  color: hsl(var(--text-secondary));
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Personality */
+.dna-personality-card {}
+
+.dna-personality-emoji {
+  font-size: 4rem;
+  margin: 0.5rem 0 1rem;
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+}
+
+.dna-personality-type {
+  font-size: 1.75rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0 0 1rem;
+}
+
+.dna-personality-desc {
+  font-size: 1.05rem;
+  color: hsl(var(--text-secondary));
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: 1.5rem;
+}
+
+.dna-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dna-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  background: hsl(var(--bg-secondary));
+  border: 1px solid hsl(var(--border-color));
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: hsl(var(--text-secondary));
+}
+
+/* Habits */
+.dna-habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  flex: 1;
+}
+
+.dna-habit-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dna-habit-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: hsl(var(--text-secondary));
+  min-width: 100px;
+}
+
+.dna-habit-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #1a1a1a;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.dna-habit-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dna-habit-pct {
+  font-size: 0.875rem;
+  font-weight: 900;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Risks */
+.dna-risks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.dna-risk-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dna-risk-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: hsl(var(--text-secondary));
+  min-width: 130px;
+}
+
+.dna-risk-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #1a1a1a;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.dna-risk-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease;
+}
+
+.dna-risk-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid;
+  min-width: 55px;
+  text-align: center;
+}
+
+/* Badges */
+.dna-badges-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex: 1;
+}
+
+.dna-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  transition: transform 0.2s;
+}
+
+.dna-badge:hover {
+  transform: translateX(4px);
+}
+
+.dna-badge-emoji {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.dna-badge-label {
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.dna-badge-desc {
+  font-size: 0.85rem;
+  color: hsl(var(--text-muted));
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .dna-hero-inner { flex-direction: column; }
+  .dna-grid { grid-template-columns: 1fr; }
+}

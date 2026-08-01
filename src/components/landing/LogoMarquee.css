@@ -1,0 +1,81 @@
+/* ─────────────── LOGO MARQUEE ─────────────── */
+.marquee-section {
+  padding: 2rem 0 5rem;
+  overflow: hidden;
+}
+
+.marquee-eyebrow {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: hsl(var(--text-muted));
+  margin-bottom: 2.25rem;
+  padding: 0 1.25rem;
+}
+
+.marquee-track {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+
+.marquee-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: max-content;
+  animation: marqueeScroll 36s linear infinite;
+}
+
+.marquee-track:hover .marquee-row {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  color: hsl(var(--text-secondary));
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.12);
+  transition: all 0.25s ease;
+}
+
+.marquee-chip:hover {
+  border-color: hsl(var(--accent-primary) / 0.35);
+  color: hsl(var(--accent-primary));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px hsl(var(--accent-primary) / 0.4);
+}
+
+.marquee-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.marquee-star {
+  color: hsl(var(--color-yellow));
+  opacity: 0.8;
+}

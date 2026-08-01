@@ -1,0 +1,9 @@
+.tilt-card-wrapper {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Inner elements inside a TiltCard can use this to pop out even more */
+.tilt-card-wrapper .tilt-child {
+  transform: translateZ(30px);
+}

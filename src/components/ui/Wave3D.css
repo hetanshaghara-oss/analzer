@@ -1,0 +1,27 @@
+/* ══════════════════════════════════════
+   WAVE3D — animated 3D wave floor layer
+══════════════════════════════════════ */
+
+.wave3d {
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: 0;
+  width: 108%;
+  height: 56%;
+  pointer-events: none;
+  display: block;
+
+  /* Fade the far edge into the horizon */
+  mask-image: linear-gradient(180deg, transparent 0%, black 16%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 16%);
+
+  /* Follow the hero's mouse parallax (vars set on .hero-section),
+     but damped so the floor reads as "farther away". */
+  transform: translate3d(
+    calc(var(--px1, 0px) * 0.4),
+    calc(var(--py1, 0px) * 0.3),
+    0
+  );
+  will-change: transform;
+}

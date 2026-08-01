@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Core Palette ── */
+  --bg-primary:    0 0% 100%;          /* #ffffff */
+  --bg-secondary:  220 14% 96%;        /* #f4f5f7 */
+  --bg-tertiary:   220 13% 91%;        /* #e4e6ea */
+  --bg-accent:     221 100% 98%;       /* very light blue tint */
+
+  /* ── Typography ── */
+  --text-primary:   222 47% 11%;       /* #0f172a */
+  --text-secondary: 215 16% 47%;       /* #64748b */
+  --text-muted:     215 20% 65%;       /* #94a3b8 */
+
+  /* ── Brand / Accent ── */
+  --accent-primary: 231 97% 62%;       /* #5b6ef5 – indigo-violet */
+  --accent-hover:   231 97% 55%;
+  --accent-light:   231 100% 95%;
+  --accent-glow:    231 97% 62% / 0.15;
+
+  /* ── Named colors ── */
+  --color-yellow:   38 92% 50%;
+  --color-green:    142 71% 45%;
+  --color-blue:     221 83% 53%;
+  --color-purple:   270 80% 65%;
+  --color-orange:   25 95% 53%;
+  --color-red:      348 83% 47%;
+
+  /* ── Status ── */
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --danger:  348 83% 47%;
+
+  /* ── Surface / Border ── */
+  --border-color:   220 13% 88%;
+  --card-bg:        0 0% 100%;
+  --card-border:    220 13% 91%;
+
+  /* ── Shadows ── */
+  --shadow-xs:      0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm:      0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg:      0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl:      0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+  --shadow-card:    0 2px 12px 0 rgb(90 100 246 / 0.07), 0 1px 3px 0 rgb(0 0 0 / 0.06);
+  --shadow-premium: 0 24px 48px -12px rgb(90 100 246 / 0.18);
+
+  /* ── Radius ── */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.25rem;
+  --radius-full: 9999px;
+
+  /* ── Typography ── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
+
+  /* ── Transitions ── */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── CSS variable aliases used in components ── */
+  --background:        hsl(var(--bg-primary));
+  --background-alt:    hsl(var(--bg-secondary));
+  --card:              hsl(var(--card-bg));
+  --border:            hsl(var(--border-color));
+  --text-primary-val:  hsl(var(--text-primary));
+  --text-secondary-val:hsl(var(--text-secondary));
+  --accent-primary-val:hsl(var(--accent-primary));
+}
+
+/* ══════════════════════════════════════
+   DARK THEME — [data-theme="dark"]
+══════════════════════════════════════ */
+[data-theme="dark"] {
+  /* ── Core Palette ── */
+  --bg-primary:    222 47% 5%;           /* #05080f — near black */
+  --bg-secondary:  220 30% 9%;           /* #101724 */
+  --bg-tertiary:   218 25% 14%;          /* #1a2233 */
+  --bg-accent:     231 50% 12%;          /* dark indigo tint */
+
+  /* ── Typography ── */
+  --text-primary:   210 40% 96%;         /* #f0f4fc — near white */
+  --text-secondary: 215 20% 65%;         /* #94a3b8 */
+  --text-muted:     215 16% 42%;         /* #5a6a84 */
+
+  /* ── Brand / Accent ── */
+  --accent-primary: 231 97% 70%;         /* brighter indigo on dark */
+  --accent-hover:   231 97% 78%;
+  --accent-light:   231 50% 18%;
+  --accent-glow:    231 97% 62% / 0.25;
+
+  /* ── Surface / Border ── */
+  --border-color:   220 25% 16%;         /* subtle dark border */
+  --card-bg:        220 30% 9%;
+  --card-border:    218 25% 16%;
+
+  /* ── Shadows (deeper on dark) ── */
+  --shadow-xs:      0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-sm:      0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-md:      0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg:      0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl:      0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --shadow-card:    0 2px 12px 0 rgb(90 100 246 / 0.15), 0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-premium: 0 24px 48px -12px rgb(90 100 246 / 0.3);
+
+  /* ── Aliases ── */
+  --background:        hsl(var(--bg-primary));
+  --background-alt:    hsl(var(--bg-secondary));
+  --card:              hsl(var(--card-bg));
+  --border:            hsl(var(--border-color));
+  --text-primary-val:  hsl(var(--text-primary));
+  --text-secondary-val:hsl(var(--text-secondary));
+  --accent-primary-val:hsl(var(--accent-primary));
+}
+
+/* Smooth theme transitions on everything except animated elements */
+html {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+*, *::before, *::after {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.15s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Exclude elements where transition would look bad */
+.floating-orb,
+.hero-grid,
+canvas,
+svg {
+  transition: none !important;
+}

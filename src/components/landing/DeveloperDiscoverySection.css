@@ -1,0 +1,393 @@
+/* ══════════════════════════════════════
+   DEVELOPER DISCOVERY — landing section
+══════════════════════════════════════ */
+
+.dd-section {
+  position: relative;
+  padding: 7rem 0;
+  overflow: hidden;
+}
+
+.dd-section::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: -160px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsl(var(--color-purple) / 0.07), transparent 65%);
+  pointer-events: none;
+}
+
+.dd-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+}
+
+.dd-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(var(--accent-primary));
+  margin-bottom: 1rem;
+}
+
+.dd-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.dd-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: hsl(var(--text-secondary));
+}
+
+/* ── Filter panel ── */
+.dd-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: end;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  border-radius: 22px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  box-shadow: var(--shadow-card);
+}
+
+.dd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dd-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: hsl(var(--text-muted));
+}
+
+.dd-field label svg {
+  color: hsl(var(--accent-primary));
+}
+
+.dd-field select {
+  height: 46px;
+  padding: 0 0.9rem;
+  border-radius: 13px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-secondary) / 0.5);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: hsl(var(--text-primary));
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  appearance: none;
+}
+
+.dd-field select:focus {
+  outline: none;
+  border-color: hsl(var(--accent-primary));
+  background: hsl(var(--bg-primary));
+  box-shadow: 0 0 0 4px hsl(var(--accent-primary) / 0.12);
+}
+
+.dd-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.dd-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 1.6rem;
+  border-radius: 13px;
+  border: none;
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -10px hsl(var(--accent-primary) / 0.8);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.dd-search-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 14px 32px -10px hsl(var(--accent-primary) / 0.9);
+}
+
+.dd-search-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.dd-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 1.1rem;
+  border-radius: 13px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  color: hsl(var(--text-secondary));
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dd-clear-btn:hover {
+  border-color: hsl(var(--color-red) / 0.4);
+  color: hsl(var(--color-red));
+}
+
+.dd-spin {
+  animation: ddRotate 1s linear infinite;
+}
+
+@keyframes ddRotate { to { transform: rotate(360deg); } }
+
+/* ── Results grid ── */
+.dd-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.dd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dd-card:hover {
+  transform: translateY(-4px);
+  border-color: hsl(var(--accent-primary) / 0.35);
+  box-shadow: 0 22px 48px -22px rgba(15, 23, 42, 0.22);
+}
+
+.dd-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.dd-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid hsl(var(--border-color));
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dd-card-head {
+  min-width: 0;
+}
+
+.dd-name {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: hsl(var(--text-primary));
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dd-login {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: hsl(var(--accent-primary));
+}
+
+.dd-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dd-location svg {
+  color: hsl(var(--text-muted));
+  flex-shrink: 0;
+}
+
+.dd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dd-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 9999px;
+  background: hsl(var(--bg-secondary) / 0.7);
+  border: 1px solid hsl(var(--border-color));
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: hsl(var(--text-secondary));
+}
+
+.dd-metrics {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+}
+
+.dd-metrics span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dd-metrics svg {
+  color: hsl(var(--text-muted));
+}
+
+.dd-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: auto;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: hsl(var(--accent-primary) / 0.08);
+  color: hsl(var(--accent-primary));
+  font-size: 0.86rem;
+  font-weight: 800;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dd-view:hover {
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -10px hsl(var(--accent-primary) / 0.85);
+}
+
+/* ── Skeleton ── */
+.dd-skeleton {
+  gap: 1rem;
+}
+
+.dd-sk-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(100deg, hsl(var(--bg-tertiary) / 0.6) 30%, hsl(var(--bg-secondary)) 50%, hsl(var(--bg-tertiary) / 0.6) 70%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s linear infinite;
+}
+
+.dd-sk-line {
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(100deg, hsl(var(--bg-tertiary) / 0.6) 30%, hsl(var(--bg-secondary)) 50%, hsl(var(--bg-tertiary) / 0.6) 70%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s linear infinite;
+}
+
+.dd-sk-line--title { width: 55%; height: 17px; }
+.dd-sk-line--sub { width: 40%; }
+.dd-sk-line--meta { width: 75%; }
+
+/* ── Empty / error state ── */
+.dd-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  border: 2px dashed hsl(var(--border-color));
+  border-radius: 20px;
+  color: hsl(var(--text-muted));
+}
+
+.dd-state h4 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: hsl(var(--text-primary));
+}
+
+.dd-state p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: hsl(var(--text-secondary));
+}
+
+.dd-retry {
+  margin-top: 0.5rem;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  border: none;
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -10px hsl(var(--accent-primary) / 0.8);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dd-retry:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .dd-panel {
+    grid-template-columns: 1fr;
+  }
+  .dd-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dd-search-btn, .dd-clear-btn {
+    width: 100%;
+  }
+  .dd-section { padding: 5rem 0; }
+}

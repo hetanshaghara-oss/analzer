@@ -1,0 +1,29 @@
+/* ══════════════════════════════════════
+   LANDING PAGE — GitInsight AI
+   Page-level styles + guards over the
+   global utility stylesheet.
+══════════════════════════════════════ */
+
+.landing-page {
+  background: hsl(var(--bg-primary));
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Neutralize global helpers that fight the landing layout */
+.landing-page .container {
+  margin-top: 0;
+}
+
+/* The global `button:hover` lift is too aggressive for landing
+   micro-interactions; each landing component defines its own
+   hover with a `.landing-page`-scoped selector which wins here. */
+.landing-page button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth anchor scrolling handled globally via `html { scroll-behavior }`,
+   but keep landing nav links crisp on click. */
+.landing-page section[id] {
+  scroll-margin-top: 84px;
+}

@@ -1,0 +1,35 @@
+/* ══════════════════════════════════════════════
+   WAVESCROLL3D — full-page fixed wave background
+══════════════════════════════════════════════ */
+
+#root {
+  position: relative;
+}
+
+.wave-scroll-3d {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+
+  /* Fade horizon + very bottom bleed */
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    black 14%,
+    black 76%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    black 14%,
+    black 76%,
+    transparent 100%
+  );
+
+  opacity: 0.75;
+}

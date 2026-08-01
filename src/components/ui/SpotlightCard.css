@@ -1,0 +1,30 @@
+.spotlight-card-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: hsl(var(--bg-primary));
+  border: 1px solid hsl(var(--border-color));
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  z-index: 1;
+}
+
+.spotlight-card-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: hsl(var(--border-color) / 0.8);
+}
+
+.spotlight-effect {
+  z-index: -1;
+}
+
+/* Inner content container to ensure it sits above the spotlight */
+.spotlight-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  background: inherit; /* Matches the parent's background so the glow is subtle on the edges */
+}

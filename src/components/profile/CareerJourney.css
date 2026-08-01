@@ -1,0 +1,149 @@
+.career-journey-container {
+  width: 100%;
+  padding-bottom: 4rem;
+}
+
+.cj-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.cj-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff, #888);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.cj-subtitle {
+  font-size: 1.1rem;
+  color: hsl(var(--text-secondary));
+}
+
+.cj-timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* The vertical line in the center */
+.cj-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #222;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.cj-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+
+/* Alternate sides */
+.cj-item-left {
+  justify-content: flex-start;
+}
+.cj-item-right {
+  justify-content: flex-end;
+}
+
+/* The circular icon on the timeline */
+.cj-marker {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border: 4px solid #0d1117; /* Background color of dashboard to break the line */
+}
+
+/* The content card */
+.cj-card {
+  width: calc(50% - 40px);
+  position: relative;
+}
+
+.cj-card-inner {
+  padding: 1.5rem 2rem;
+}
+
+.cj-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.cj-card-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: hsl(var(--text-primary));
+  margin-bottom: 0.25rem;
+}
+
+.cj-card-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--text-secondary));
+  margin-bottom: 1rem;
+}
+
+.cj-card-desc {
+  font-size: 0.95rem;
+  color: hsl(var(--text-muted));
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.cj-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Responsive: Stack on small screens */
+@media (max-width: 768px) {
+  .cj-line {
+    left: 20px;
+    transform: none;
+  }
+  
+  .cj-item {
+    justify-content: flex-end;
+  }
+  
+  .cj-marker {
+    left: 20px;
+    transform: translateY(-50%);
+  }
+  
+  .cj-card {
+    width: calc(100% - 60px);
+  }
+}

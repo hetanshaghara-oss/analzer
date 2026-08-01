@@ -1,0 +1,63 @@
+# Render blueprint — one web service hosts both the API and the built frontend.
+#
+# Deploy: push this repo to GitHub, then in Render: New → Blueprint → connect
+# the repo. Render reads this file, creates the service, and prompts you for
+# every `sync: false` env var (secrets) in the dashboard.
+#
+# After the first deploy, set in the Render dashboard (Service → Environment):
+#   MONGODB_URI, JWT_SECRET, JWT_REFRESH_SECRET, CLIENT_URL, FRONTEND_URL,
+#   GITHUB_OAUTH_CLIENT_ID, GITHUB_OAUTH_CLIENT_SECRET, GITHUB_OAUTH_REDIRECT_URI,
+#   GITHUB_TOKEN (+ Google/GitLab OAuth if you use them)
+# Also register the production callback in your GitHub OAuth app settings:
+#   https://your-app.onrender.com/api/auth/github/callback
+
+services:
+  - type: web
+    name: gitinsight-ai
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build && cd server && npm ci
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      # Secrets — set these in the Render dashboard (they are prompted at setup)
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: GITHUB_OAUTH_CLIENT_ID
+        sync: false
+      - key: GITHUB_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_OAUTH_REDIRECT_URI
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        sync: false
+      - key: GITLAB_OAUTH_CLIENT_ID
+        sync: false
+      - key: GITLAB_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GITLAB_OAUTH_REDIRECT_URI
+        sync: false

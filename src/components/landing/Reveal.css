@@ -1,0 +1,32 @@
+/* Scroll-triggered reveal wrapper */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal--left { transform: translateX(-48px); }
+.reveal--right { transform: translateX(48px); }
+.reveal--scale { transform: scale(0.93); }
+
+.reveal--left.reveal--visible,
+.reveal--right.reveal--visible,
+.reveal--scale.reveal--visible {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,56 @@
+.impact-globe-wrapper {
+  background: #fff;
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.globe-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.globe-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: hsl(var(--text-primary));
+  margin-bottom: 0.25rem;
+}
+
+.globe-subtitle {
+  color: hsl(var(--text-secondary));
+  font-size: 0.95rem;
+}
+
+.globe-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  /* Add a subtle radial gradient behind the globe */
+  background: radial-gradient(circle at center, hsl(var(--accent-primary) / 0.05) 0%, transparent 60%);
+}
+
+.globe-container canvas {
+  opacity: 0;
+  animation: fadeGlobeIn 1.5s ease-out forwards;
+  cursor: grab;
+}
+
+.globe-container canvas:active {
+  cursor: grabbing;
+}
+
+@keyframes fadeGlobeIn {
+  to {
+    opacity: 1;
+  }
+}

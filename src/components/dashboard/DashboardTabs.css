@@ -1,0 +1,59 @@
+/* ─────────────── DASHBOARD TABS — premium pills ─────────────── */
+.dashboard-tabs {
+  position: sticky;
+  top: 72px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--border-color));
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: 0 8px 30px -14px rgba(15, 23, 42, 0.16);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 2rem;
+  width: max-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  padding: 9px 16px;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: hsl(var(--text-secondary));
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-button:hover {
+  color: hsl(var(--text-primary));
+  background: hsl(var(--bg-secondary));
+}
+
+.tab-button.active {
+  color: #fff;
+  background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--color-purple)));
+  box-shadow: 0 8px 20px -8px hsl(var(--accent-primary) / 0.8);
+}
+
+@media (max-width: 720px) {
+  .dashboard-tabs {
+    border-radius: 16px;
+    width: 100%;
+  }
+  .tab-button {
+    padding: 8px 13px;
+    font-size: 0.84rem;
+  }
+}

@@ -1,0 +1,24 @@
+.floating-orbs-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  animation: orbFloat linear infinite;
+  will-change: transform;
+  /* individual duration/delay set via style prop */
+  animation-name: orbFloat;
+}
+
+@keyframes orbFloat {
+  0%   { transform: translateY(0px)   rotate(0deg); }
+  25%  { transform: translateY(-18px) rotate(3deg); }
+  50%  { transform: translateY(-10px) rotate(0deg); }
+  75%  { transform: translateY(-22px) rotate(-3deg); }
+  100% { transform: translateY(0px)   rotate(0deg); }
+}

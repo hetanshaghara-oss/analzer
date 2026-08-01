@@ -1,0 +1,11 @@
+.card {
+  background: #fff;
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card:hover {
+  border-color: hsl(var(--accent-primary) / 0.4);
+}
