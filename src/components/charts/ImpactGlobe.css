@@ -54,3 +54,29 @@
     opacity: 1;
   }
 }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  .impact-globe-wrapper {
+    padding: 1.5rem;
+  }
+  .globe-container {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .impact-globe-wrapper {
+    padding: 1.25rem;
+  }
+  .globe-title {
+    font-size: 1.3rem;
+  }
+  .globe-subtitle {
+    font-size: 0.85rem;
+  }
+  .globe-container {
+    min-height: 260px;
+  }
+}
+

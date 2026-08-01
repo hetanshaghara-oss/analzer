@@ -145,3 +145,48 @@
   color: hsl(var(--accent-primary));
   font-weight: 800;
 }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  .time-machine-wrapper {
+    padding: 2rem 1.25rem;
+    min-height: auto;
+  }
+  .tm-display-card {
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .tm-year-huge {
+    font-size: 3.5rem;
+  }
+  .tm-slider-container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tm-title {
+    font-size: 1.6rem;
+  }
+  .tm-year-huge {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+  }
+  .tm-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .tm-stat-box {
+    padding: 1rem;
+  }
+  .tm-stat-value {
+    font-size: 1.25rem;
+  }
+  .tm-slider-container {
+    padding: 0 0.5rem;
+  }
+  .tm-tick {
+    font-size: 0.75rem;
+  }
+}
+
