@@ -371,3 +371,193 @@
   align-items: center;
   gap: 1rem;
 }
+
+/* ── MOBILE RESPONSIVE ── */
+
+/* ── Small desktop (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .lb2-hero {
+    padding: 4rem 0 3rem;
+  }
+
+  .lb2-hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .lb2-podium {
+    gap: 1rem;
+    padding: 2rem 1.5rem 0;
+  }
+
+  .lb2-body {
+    padding: 1.5rem 1rem 4rem;
+  }
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .lb2-hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .lb2-hero-title {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+
+  .lb2-hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .lb2-body {
+    padding: 1.25rem 0.75rem 3rem;
+  }
+
+  /* Controls wrap and stretch */
+  .lb2-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .lb2-cat-tabs {
+    justify-content: flex-start;
+  }
+
+  .lb2-search-box {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .lb2-search-input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  /* Stack podium items horizontally → vertically */
+  .lb2-podium {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem 1rem 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .lb2-podium-base {
+    width: 160px;
+    height: 40px !important; /* flatten bases when stacked */
+  }
+
+  /* Full-width list rows, reduce padding */
+  .lb2-row-inner {
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .lb2-row-rank {
+    font-size: 1.2rem;
+    min-width: 30px;
+  }
+
+  .lb2-row-score-val {
+    font-size: 1.2rem;
+  }
+}
+
+/* ── Phone (≤ 480px) ── */
+@media (max-width: 480px) {
+  .lb2-hero {
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .lb2-hero-title {
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+  }
+
+  .lb2-hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .lb2-body {
+    padding: 1rem 0.5rem 2.5rem;
+  }
+
+  .lb2-cat-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.9rem;
+  }
+
+  /* Collapse row to tighter layout */
+  .lb2-row-inner {
+    gap: 0.6rem;
+    padding: 0.85rem 0.85rem;
+    flex-wrap: nowrap;
+  }
+
+  .lb2-row-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .lb2-row-name {
+    font-size: 0.95rem;
+  }
+
+  .lb2-row-login {
+    font-size: 0.78rem;
+  }
+
+  .lb2-row-score-val {
+    font-size: 1.05rem;
+  }
+
+  .lb2-row-score-label {
+    font-size: 0.65rem;
+  }
+
+  /* Podium tighter */
+  .lb2-podium-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .lb2-avatar-1 {
+    width: 70px;
+    height: 70px;
+  }
+
+  .lb2-crown {
+    font-size: 1.5rem;
+  }
+}
+
+/* ── Tiny phones (≤ 360px) ── */
+@media (max-width: 360px) {
+  .lb2-hero-title {
+    font-size: 1.4rem;
+  }
+
+  .lb2-row-inner {
+    padding: 0.7rem 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .lb2-row-rank {
+    min-width: 24px;
+    font-size: 1rem;
+  }
+
+  .lb2-row-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .lb2-row-name {
+    font-size: 0.88rem;
+  }
+
+  .lb2-row-arrow {
+    display: none;
+  }
+}

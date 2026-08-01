@@ -47,13 +47,63 @@
   box-shadow: 0 8px 20px -8px hsl(var(--accent-primary) / 0.8);
 }
 
-@media (max-width: 720px) {
+/* ── MOBILE RESPONSIVE ── */
+
+/* ── Small desktop (≤1024px) ── */
+@media (max-width: 1024px) {
+  .dashboard-tabs {
+    width: 100%;
+    border-radius: 20px;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  .tab-button { padding: 9px 14px; font-size: 0.875rem; }
+}
+
+/* ── Tablet (≤768px) ── */
+@media (max-width: 768px) {
   .dashboard-tabs {
     border-radius: 16px;
     width: 100%;
+    gap: 2px;
+    padding: 6px;
+    /* Horizontal scroll on overflow — keep tabs in one row */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   .tab-button {
     padding: 8px 13px;
     font-size: 0.84rem;
+    scroll-snap-align: start;
+    flex-shrink: 0; /* prevent buttons from shrinking and wrapping */
+  }
+}
+
+/* ── Mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .dashboard-tabs {
+    border-radius: 12px;
+    padding: 5px;
+    gap: 1px;
+    margin-bottom: 1.25rem;
+    /* Align to left edge so first tab is always visible */
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+  .tab-button {
+    padding: 9px 11px;   /* taller for touch — ≥44px tap target */
+    font-size: 0.78rem;
+    min-height: 36px;
+  }
+}
+
+/* ── Tiny phones (≤360px) ── */
+@media (max-width: 360px) {
+  .tab-button {
+    padding: 8px 9px;
+    font-size: 0.72rem;
+    min-height: 36px;
   }
 }

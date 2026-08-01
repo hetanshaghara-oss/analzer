@@ -570,3 +570,231 @@
   border: 1px solid hsl(var(--border-color));
   cursor: not-allowed;
 }
+
+/* ── MOBILE RESPONSIVE ── */
+
+/* ── Small desktop (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .arena-header {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .arena-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  }
+
+  .vs-grid {
+    gap: 3rem;
+  }
+
+  .arena-charts {
+    gap: 1.25rem;
+  }
+
+  .arena-chart-body {
+    height: 300px;
+  }
+
+  .cs-card {
+    padding: 2rem;
+  }
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .arena-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .arena-title {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+  }
+
+  .arena-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .arena-select-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Stack the two VS profile columns vertically */
+  .vs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Hide the floating VS badge (overlaps stacked layout) */
+  .vs-badge {
+    display: none;
+  }
+
+  .vs-card-content {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .vs-avatar-ring {
+    width: 90px;
+    height: 90px;
+  }
+
+  .vs-name {
+    font-size: 1.3rem;
+  }
+
+  /* Full-width charts, single column */
+  .arena-charts {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .arena-chart-body {
+    height: 260px;
+  }
+
+  .arena-chart-card {
+    padding: 1.25rem;
+  }
+
+  .arena-shared {
+    padding: 1.25rem;
+  }
+
+  .arena-shared-title {
+    font-size: 1.1rem;
+  }
+
+  .arena-verdict {
+    margin-bottom: 2rem;
+  }
+
+  .arena-verdict-text {
+    font-size: 1rem;
+  }
+
+  /* Selector card */
+  .cs-card {
+    padding: 1.5rem;
+  }
+
+  .cs-start-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem 1.5rem;
+  }
+
+  .cs-draft-list {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cs-draft-item {
+    justify-content: space-between;
+  }
+}
+
+/* ── Phone (≤ 480px) ── */
+@media (max-width: 480px) {
+  .arena-header {
+    margin-bottom: 1rem;
+  }
+
+  .arena-title {
+    font-size: 1.3rem;
+  }
+
+  .vs-card-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .vs-avatar-ring {
+    width: 76px;
+    height: 76px;
+  }
+
+  .vs-name {
+    font-size: 1.15rem;
+  }
+
+  .vs-stat-row {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .vs-stat-value {
+    font-size: 1.05rem;
+  }
+
+  .arena-chart-body {
+    height: 220px;
+  }
+
+  .arena-shared {
+    padding: 1rem;
+  }
+
+  .skill-pill {
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .arena-error {
+    margin: 2rem auto;
+    padding: 1.5rem 1rem;
+  }
+
+  .cs-icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .cs-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .cs-subtitle {
+    font-size: 0.92rem;
+  }
+}
+
+/* ── Tiny phones (≤ 360px) ── */
+@media (max-width: 360px) {
+  .arena-title {
+    font-size: 1.15rem;
+  }
+
+  .vs-name {
+    font-size: 1rem;
+  }
+
+  .vs-handle {
+    font-size: 0.9rem;
+  }
+
+  .vs-stat-label {
+    font-size: 0.7rem;
+  }
+
+  .vs-stat-value {
+    font-size: 0.95rem;
+  }
+
+  .arena-chart-body {
+    height: 190px;
+  }
+
+  .cs-card {
+    padding: 1rem;
+  }
+
+  .cs-start-btn {
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+  }
+}

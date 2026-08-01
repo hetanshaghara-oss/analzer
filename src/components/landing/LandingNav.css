@@ -309,3 +309,63 @@
   background: rgba(5, 8, 15, 0.85);
   border-color: hsl(var(--border-color));
 }
+
+/* ── MOBILE RESPONSIVE ── */
+
+/* ── Small desktop (≤1024px) ── */
+@media (max-width: 1024px) {
+  .landing-nav-inner { height: 62px; }
+}
+
+/* ── Tablet (≤768px) ── */
+@media (max-width: 768px) {
+  .landing-nav-inner {
+    height: 60px;
+    gap: 0.75rem;
+  }
+  /* theme-btn must always stay visible — override any hide rules */
+  .landing-nav-theme-btn {
+    display: flex !important;
+    width: 34px;
+    height: 34px;
+  }
+  /* mobile menu: display as block (flex is already set via .landing-nav-mobile open state) */
+  .landing-nav-mobile {
+    /* ensure the open-state flex works correctly */
+    gap: 0.35rem;
+    padding: 0.65rem 1rem 1rem;
+  }
+  .landing-nav-mobile-link {
+    padding: 11px 12px;
+    font-size: 0.95rem;
+  }
+  .landing-nav-mobile-cta {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
+
+/* ── Mobile (≤480px) ── */
+@media (max-width: 480px) {
+  /* Restore the CTA button in the mobile dropdown instead of top bar */
+  .landing-nav-cta { display: none; }
+  .landing-nav-mobile-cta { display: flex; }
+
+  .landing-nav-inner { height: 56px; gap: 0.5rem; }
+  .landing-nav-name { font-size: 0.95rem; }
+  .landing-nav-theme-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .landing-nav-burger {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ── Small phone (≤360px) ── */
+@media (max-width: 360px) {
+  .landing-nav-inner { gap: 0.35rem; }
+  .landing-nav-name { font-size: 0.88rem; }
+  .landing-nav-logo { width: 30px; height: 30px; }
+}

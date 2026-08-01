@@ -441,10 +441,73 @@
   transition: transform 0.3s ease-out;
 }
 
-/* ── Responsive ── */
-@media (max-width: 700px) {
-  .hero-section { padding-top: 7.5rem; padding-bottom: 4rem; }
-  .hero-stats-row { gap: 1.25rem; }
-  .hero-title { font-size: 2.7rem; }
-  .hero-inner { gap: 3rem; }
+/* ── MOBILE RESPONSIVE ── */
+
+/* ── Small desktop / large tablet (≤1024px) ── */
+@media (max-width: 1024px) {
+  .hero-section { padding: 7.5rem 0 5rem; }
+  .hero-inner { gap: 3.5rem; }
+  .hero-copy { max-width: 680px; }
+  .hero-search-anchor { max-width: 520px; }
+}
+
+/* ── Tablet (≤768px) — hide mockup, stack vertically ── */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 7rem 0 4rem;
+    min-height: auto;
+  }
+  .hero-inner {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .hero-copy {
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  .hero-mockup-wrap { display: none; }
+  .hero-title { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+  .hero-subtitle { font-size: 1rem; max-width: 100%; }
+  .hero-search-anchor { max-width: 100%; }
+  .hero-stats-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.75rem;
+  }
+  .hero-stat-divider { display: none; }
+  .hero-badge { font-size: 0.78rem; padding: 6px 14px; }
+  .hero-aurora--1 { width: 600px; height: 600px; }
+  .hero-aurora--2 { width: 400px; height: 400px; }
+  .hero-aurora--3 { width: 420px; height: 420px; }
+}
+
+/* ── Mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .hero-section { padding: 6rem 0 3rem; overflow-x: hidden; }
+  .hero-inner { gap: 2rem; }
+  .hero-title { font-size: clamp(1.9rem, 9vw, 2.6rem); letter-spacing: -0.03em; }
+  .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.75rem; }
+  .hero-badge { font-size: 0.74rem; gap: 7px; margin-bottom: 1.5rem; }
+  .search-input-container { padding: 4px 4px 4px 14px; }
+  .hero-input { font-size: 0.95rem; }
+  .hero-submit-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    gap: 5px;
+  }
+  .hero-submit-btn span { display: none; } /* hide label text, keep icon */
+  .hero-stats-row { gap: 0.75rem; margin-top: 1.5rem; }
+  .hero-stat-num { font-size: 1.25rem; }
+  .hero-stat-label { font-size: 0.68rem; }
+  .linkedin-upload-btn { font-size: 0.78rem; padding: 7px 14px; }
+}
+
+/* ── Small phone (≤360px) ── */
+@media (max-width: 360px) {
+  .hero-title { font-size: 1.75rem; }
+  .hero-section { padding: 5.5rem 0 2.5rem; }
+  .hero-submit-btn { padding: 9px 12px; }
 }
