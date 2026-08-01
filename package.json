@@ -12,10 +12,23 @@
     "preview": "vite preview",
     "start:prod": "node server/index.js"
   },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cobe": "^2.0.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.1",
+    "helmet": "^8.3.0",
     "html2pdf.js": "^0.14.0",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.27.0",
+    "mongoose": "^9.8.0",
+    "nodemailer": "^9.0.3",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

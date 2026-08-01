@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
+const { sendMail } = require("../services/mailer");
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign(
@@ -197,6 +198,18 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordToken = token;
     user.resetPasswordExpiry = new Date(Date.now() + 60 * 60 * 1000);
     await user.save();
+
+    // Deliver the reset link by email. Without SMTP configured this no-ops
+    // (logs a warning) so the endpoint still returns the safe generic message.
+    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${token}`;
+    await sendMail({
+      to: user.email,
+      subject: "Reset your GitInsight AI password",
+      html: `<p>Hi ${user.name || "there"},</p>
+<p>You asked to reset your GitInsight AI password. Click the link below — it expires in 1 hour:</p>
+<p><a href="${resetUrl}">${resetUrl}</a></p>
+<p>If you didn't request this, you can safely ignore this email.</p>`,
+    });
 
     res.json({
       message:

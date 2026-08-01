@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
+const OAuthCode = require("../models/OAuthCode");
 const {
   providers,
   listConfiguredProviders,
@@ -10,9 +11,6 @@ const { storeState, consumeState } = require("../services/oauthState");
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const OAUTH_CODE_TTL = 60 * 1000; // one-time frontend exchange codes live 60s
-
-// Maps a single-use exchange code -> { accessToken, refreshToken, userId }.
-const oauthCodes = new Map();
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign(
@@ -72,12 +70,16 @@ async function completeOAuthSignIn(providerId, code, res) {
     }
     await user.save();
 
+    // Persist the one-time code in MongoDB (not an in-memory Map) so the
+    // redirect that creates it and the frontend's POST /exchange that consumes
+    // it stay in sync even when they land on different serverless instances.
     const oauthCode = crypto.randomBytes(24).toString("hex");
-    oauthCodes.set(oauthCode, {
+    await OAuthCode.create({
+      code: oauthCode,
       at,
       rt,
       userId: user._id.toString(),
-      expiresAt: Date.now() + OAUTH_CODE_TTL,
+      expiresAt: new Date(Date.now() + OAUTH_CODE_TTL),
     });
 
     const url = new URL(`${FRONTEND_URL}/oauth/callback`);
@@ -123,14 +125,14 @@ const exchangeOauthCode = async (req, res) => {
   if (!code) {
     return res.status(400).json({ message: "OAuth code is required." });
   }
-  const record = oauthCodes.get(code);
-  if (!record || Date.now() > record.expiresAt) {
-    oauthCodes.delete(code);
+  // Atomic read-and-delete makes the code single-use even across serverless
+  // instances. The Mongo TTL index garbage-collects any that are never used.
+  const record = await OAuthCode.findOneAndDelete({ code });
+  if (!record || Date.now() > new Date(record.expiresAt).getTime()) {
     return res
       .status(400)
       .json({ message: "This sign-in link has expired. Please try again." });
   }
-  oauthCodes.delete(code);
 
   const user = await User.findById(record.userId).select(
     "+githubAccessToken +githubPat",
