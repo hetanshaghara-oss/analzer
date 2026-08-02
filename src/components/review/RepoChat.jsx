@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Card from '../ui/Card';
+import ErrorBoundary from '../ui/ErrorBoundary';
 import { Send, Sparkles, Bot, User } from 'lucide-react';
 import './RepoChat.css';
 
@@ -67,6 +68,9 @@ const RepoChat = ({ owner, repo }) => {
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
+  // Holds the raw streamed text between throttled flushes to state. Avoids
+  // re-rendering + re-parsing the whole markdown on every streamed chunk.
+  const streamAccRef = useRef('');
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -108,17 +112,31 @@ const RepoChat = ({ owner, repo }) => {
         return;
       }
 
-      let acc = '';
-      await readStream(response, (delta) => {
-        acc += delta;
+      // Throttle the markdown re-renders: re-parsing the whole accumulated
+      // markdown on EVERY streamed chunk can lock the main thread (blank /
+      // frozen page) on fast streams. Flush at most ~every 100ms, then one
+      // final exact flush once the stream ends.
+      streamAccRef.current = '';
+      const flushStream = () => {
+        const text = streamAccRef.current;
         setMessages((prev) => {
           const next = prev.slice();
           if (next.length && next[next.length - 1].role === 'assistant') {
-            next[next.length - 1] = { role: 'assistant', content: acc };
+            next[next.length - 1] = { role: 'assistant', content: text };
           }
           return next;
         });
+      };
+      let lastFlush = 0;
+      await readStream(response, (delta) => {
+        streamAccRef.current += delta;
+        const now = Date.now();
+        if (now - lastFlush >= 100) {
+          lastFlush = now;
+          flushStream();
+        }
       });
+      flushStream();
     } catch (err) {
       setError(err.message || 'Network error while streaming the reply.');
     } finally {
@@ -178,9 +196,16 @@ const RepoChat = ({ owner, repo }) => {
               <div className={`chat-bubble ${m.role}`}>
                 {m.role === 'assistant' ? (
                   m.content ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} className="chat-md">
-                      {m.content}
-                    </ReactMarkdown>
+                    <ErrorBoundary
+                      fallback={<p className="chat-user-text">{m.content}</p>}
+                    >
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        className="chat-md"
+                      >
+                        {m.content}
+                      </ReactMarkdown>
+                    </ErrorBoundary>
                   ) : (
                     <span className="chat-typing">▍</span>
                   )
