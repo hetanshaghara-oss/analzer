@@ -5,6 +5,13 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import {
+  getAccessToken,
+  tryRefresh as refreshTokens,
+  clearTokens as dropTokens,
+  saveTokens as persistTokens,
+  authFetch as apiFetch,
+} from "../services/http";
 
 const AuthContext = createContext(null);
 
@@ -25,42 +32,24 @@ export const AuthProvider = ({ children }) => {
 
   const saveTokens = (accessToken, refreshToken) => {
     setToken(accessToken);
-    localStorage.setItem("gitinsight_token", accessToken);
-    if (refreshToken) localStorage.setItem("gitinsight_refresh", refreshToken);
+    persistTokens(accessToken, refreshToken);
   };
 
   const clearTokens = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem("gitinsight_token");
-    localStorage.removeItem("gitinsight_refresh");
+    dropTokens();
   };
 
-  const authFetch = useCallback(
-    async (url, options = {}) => {
-      const headers = {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      };
-      if (token) headers["Authorization"] = `Bearer ${token}`;
-      const res = await fetch(API + url, { ...options, headers });
-
-      if (res.status === 401) {
-        const data = await res.json();
-        if (data.code === "TOKEN_EXPIRED") {
-          const refreshed = await tryRefresh();
-          if (refreshed) {
-            headers["Authorization"] =
-              `Bearer ${localStorage.getItem("gitinsight_token")}`;
-            return fetch(API + url, { ...options, headers });
-          }
-        }
-        clearTokens();
-      }
-      return res;
-    },
-    [token],
-  );
+  const authFetch = useCallback(async (url, options = {}) => {
+    const res = await apiFetch(url, options);
+    // Keep React state in sync with whatever apiFetch did to localStorage —
+    // the access token may have been refreshed (or the session cleared).
+    const accessToken = getAccessToken();
+    setToken(accessToken);
+    if (!accessToken) setUser(null);
+    return res;
+  }, []);
 
   const refreshUser = useCallback(async () => {
     if (!token) return null;
@@ -82,21 +71,9 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const tryRefresh = async () => {
-    const refreshToken = localStorage.getItem("gitinsight_refresh");
-    if (!refreshToken) return false;
-    try {
-      const res = await fetch(`${API}/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
-      });
-      if (!res.ok) return false;
-      const { accessToken, refreshToken: newRefresh } = await res.json();
-      saveTokens(accessToken, newRefresh);
-      return true;
-    } catch {
-      return false;
-    }
+    const ok = await refreshTokens();
+    if (ok) setToken(getAccessToken());
+    return ok;
   };
 
   // Load user on mount. The access token lives only ~15 minutes, so if it has
@@ -184,7 +161,11 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password }),
       });
       const data = await safeJson(res);
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) {
+        const err = new Error(data.message || "Login failed");
+        err.code = data.code; // e.g. "EMAIL_NOT_VERIFIED"
+        throw err;
+      }
       saveTokens(data.accessToken, data.refreshToken);
       setUser(data.user);
       return data.user;

@@ -9,6 +9,7 @@ const {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  resendVerification,
   changePassword,
   getMe,
 } = require("../controllers/authController");
@@ -25,6 +26,7 @@ router.post("/refresh", refreshAccessToken);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 router.get("/verify-email", verifyEmail);
+router.post("/resend-verification", resendVerification);
 router.post("/change-password", requireAuth, changePassword);
 router.get("/me", requireAuth, getMe);
 

@@ -1,11 +1,10 @@
-const API_BASE_URL = "/api/github";
+import { authFetch } from "./http";
 
-function getAuthHeaders() {
-  const headers = { "Content-Type": "application/json" };
-  const token = localStorage.getItem("gitinsight_token");
-  if (token) headers.Authorization = `Bearer ${token}`;
-  return headers;
-}
+const API_BASE_URL = "/github";
+
+// authFetch (./http) attaches the Content-Type and Authorization headers and
+// transparently refreshes an expired access token, so no token logic lives here.
+const getAuthHeaders = () => ({});
 
 export class GitHubAPIError extends Error {
   constructor(message, status) {
@@ -38,7 +37,7 @@ async function handleApiResponse(response, fallbackMessage) {
 }
 
 export async function fetchUserProfile(username) {
-  const response = await fetch(`${API_BASE_URL}/users/${username}`, {
+  const response = await authFetch(`${API_BASE_URL}/users/${username}`, {
     headers: getAuthHeaders(),
   });
   return handleApiResponse(
@@ -48,7 +47,7 @@ export async function fetchUserProfile(username) {
 }
 
 export async function fetchUserRepositories(username) {
-  const response = await fetch(`${API_BASE_URL}/users/${username}/repos`, {
+  const response = await authFetch(`${API_BASE_URL}/users/${username}/repos`, {
     headers: getAuthHeaders(),
   });
   return handleApiResponse(
@@ -60,7 +59,7 @@ export async function fetchUserRepositories(username) {
 export const fetchUserRepos = fetchUserRepositories;
 
 export async function fetchUserEvents(username) {
-  const response = await fetch(`${API_BASE_URL}/users/${username}/events`, {
+  const response = await authFetch(`${API_BASE_URL}/users/${username}/events`, {
     headers: getAuthHeaders(),
   });
   return (
@@ -69,14 +68,14 @@ export async function fetchUserEvents(username) {
 }
 
 export async function fetchRepoDetail(owner, repo) {
-  const response = await fetch(`${API_BASE_URL}/repos/${owner}/${repo}`, {
+  const response = await authFetch(`${API_BASE_URL}/repos/${owner}/${repo}`, {
     headers: getAuthHeaders(),
   });
   return handleApiResponse(response, "Repository not found");
 }
 
 export async function fetchRepoFileTree(owner, repo) {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/repos/${owner}/${repo}/contents`,
     { headers: getAuthHeaders() },
   );
@@ -90,7 +89,7 @@ export async function fetchRepoFileTree(owner, repo) {
 
 export async function fetchRepoReadme(owner, repo) {
   try {
-    const response = await fetch(
+    const response = await authFetch(
       `${API_BASE_URL}/repos/${owner}/${repo}/readme`,
       { headers: getAuthHeaders() },
     );
@@ -103,7 +102,7 @@ export async function fetchRepoReadme(owner, repo) {
 }
 
 export async function fetchRepoLanguages(owner, repo) {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/repos/${owner}/${repo}/languages`,
     { headers: getAuthHeaders() },
   );
@@ -116,7 +115,7 @@ export async function fetchRepoLanguages(owner, repo) {
 }
 
 export async function fetchRepoContributors(owner, repo) {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/repos/${owner}/${repo}/contributors?per_page=10`,
     { headers: getAuthHeaders() },
   );
@@ -262,7 +261,7 @@ export function calculateStatistics(repos) {
 }
 
 export async function fetchLeaderboard(category = "followers") {
-  const response = await fetch(`${API_BASE_URL}/leaderboard/${category}`, {
+  const response = await authFetch(`${API_BASE_URL}/leaderboard/${category}`, {
     headers: getAuthHeaders(),
   });
   return handleApiResponse(
@@ -277,7 +276,7 @@ export async function fetchDeveloperSearch({ language = "", country = "" } = {})
   if (country) parts.push(`location:${country}`);
   parts.push("followers:>20");
   const q = parts.join(" ");
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/search/users?q=${encodeURIComponent(q)}`,
     { headers: getAuthHeaders() },
   );
@@ -451,7 +450,7 @@ const geoDictionary = {
 export async function fetchFollowerLocations(username) {
   try {
     // 1. Fetch followers list
-    const response = await fetch(`${API_BASE_URL}/users/${username}/followers`, {
+    const response = await authFetch(`${API_BASE_URL}/users/${username}/followers`, {
       headers: getAuthHeaders(),
     });
     const followers = await handleApiResponse(response, "Failed to fetch followers") || [];
@@ -463,7 +462,7 @@ export async function fetchFollowerLocations(username) {
     const detailedFollowers = await Promise.all(
       topFollowers.map(async (f) => {
         try {
-          const res = await fetch(`${API_BASE_URL}/users/${f.login}`, { headers: getAuthHeaders() });
+          const res = await authFetch(`${API_BASE_URL}/users/${f.login}`, { headers: getAuthHeaders() });
           return await res.json();
         } catch(e) { return null; }
       })

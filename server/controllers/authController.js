@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("../models/User");
 const Payment = require("../models/Payment");
-const { sendMail } = require("../services/mailer");
+const { sendMail, isConfigured } = require("../services/mailer");
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign(
@@ -67,6 +67,20 @@ const register = async (req, res) => {
     user.refreshTokens = [refreshToken];
     await user.save();
 
+    // Send the verification email when SMTP is configured (no-ops otherwise,
+    // so accounts created without email setup aren't left dangling).
+    if (isConfigured()) {
+      const verifyUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/verify-email?token=${verificationToken}`;
+      await sendMail({
+        to: user.email,
+        subject: "Verify your GitInsight AI email",
+        html: `<p>Hi ${name || "there"},</p>
+<p>Thanks for creating a GitInsight AI account. Please confirm your email to finish setting it up:</p>
+<p><a href="${verifyUrl}">${verifyUrl}</a></p>
+<p>This link expires in 24 hours.</p>`,
+      });
+    }
+
     const safeUser =
       typeof user.toSafeObject === "function" ? user.toSafeObject() : user;
     // A buyer may have paid (and been confirmed) before creating their
@@ -108,6 +122,17 @@ const login = async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password." });
+
+    // Only enforce email verification when emails are actually deliverable —
+    // otherwise every account created without SMTP configured would be locked
+    // out of signing in with no way to verify.
+    if (!user.isVerified && isConfigured()) {
+      return res.status(403).json({
+        message:
+          "Please verify your email address before signing in. Check your inbox for the verification link, or request a new one.",
+        code: "EMAIL_NOT_VERIFIED",
+      });
+    }
 
     const { accessToken, refreshToken } = generateTokens(user._id);
 
@@ -283,6 +308,46 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+// POST /api/auth/resend-verification
+const resendVerification = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required." });
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    // Return a generic message whether or not the account exists, so this
+    // endpoint can't be used to probe which emails are registered.
+    const genericMessage =
+      "If this email is registered and unverified, a new verification link has been sent.";
+    if (!user) return res.json({ message: genericMessage });
+    if (user.isVerified)
+      return res.json({
+        message: "This account is already verified. You can sign in.",
+      });
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await user.save();
+
+    const verifyUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/verify-email?token=${verificationToken}`;
+    await sendMail({
+      to: user.email,
+      subject: "Verify your GitInsight AI email",
+      html: `<p>Hi ${user.name || "there"},</p>
+<p>Please confirm your email to finish setting up your GitInsight AI account:</p>
+<p><a href="${verifyUrl}">${verifyUrl}</a></p>
+<p>This link expires in 24 hours.</p>`,
+    });
+
+    res.json({ message: genericMessage });
+  } catch (err) {
+    console.error("Resend verification error:", err);
+    res.status(500).json({ message: "Failed to send verification link." });
+  }
+};
+
 // POST /api/auth/change-password (requires auth)
 const changePassword = async (req, res) => {
   try {
@@ -330,6 +395,7 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  resendVerification,
   changePassword,
   getMe,
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { GithubIcon } from '../../components/ui/icons';
 import SocialAuthButtons from '../../components/auth/SocialAuthButtons';
@@ -7,7 +7,7 @@ import { Loader2, Eye, EyeOff } from 'lucide-react';
 import './Auth.css';
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -16,20 +16,63 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [verifyNotice, setVerifyNotice] = useState(false);
+  const [resendMsg, setResendMsg] = useState('');
+  const [resending, setResending] = useState(false);
+
+  // Already signed in — nothing to do on the login page.
+  if (authLoading) {
+    return (
+      <div className="auth-page">
+        <div
+          className="auth-card"
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '12rem' }}
+        >
+          <Loader2 size={24} className="animate-spin" />
+        </div>
+      </div>
+    );
+  }
+  if (user) return <Navigate to="/" replace />;
 
   const handleChange = (e) => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setVerifyNotice(false);
+    setResendMsg('');
     setLoading(true);
     try {
       await login(form);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message);
+      if (err.code === 'EMAIL_NOT_VERIFIED') {
+        setVerifyNotice(true);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!form.email) return;
+    setResending(true);
+    setResendMsg('');
+    try {
+      const res = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      setResendMsg(data.message || 'Verification email sent.');
+    } catch {
+      setResendMsg('Could not send the verification email. Please try again.');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -49,6 +92,24 @@ const Login = () => {
         {error && (
           <div className="auth-alert auth-alert-error">
             ⚠️ {error}
+          </div>
+        )}
+
+        {verifyNotice && (
+          <div className="auth-alert auth-alert-error">
+            <div>
+              <strong>Email not verified yet.</strong> Check your inbox for the
+              verification link we sent when you registered, or request a new one below.
+              <button
+                type="button"
+                className="auth-resend-btn"
+                onClick={handleResend}
+                disabled={resending}
+              >
+                {resending ? 'Sending…' : 'Resend verification email'}
+              </button>
+              {resendMsg && <span className="auth-resend-msg">{resendMsg}</span>}
+            </div>
           </div>
         )}
 

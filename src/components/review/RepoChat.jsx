@@ -4,9 +4,12 @@ import remarkGfm from 'remark-gfm';
 import Card from '../ui/Card';
 import ErrorBoundary from '../ui/ErrorBoundary';
 import { Send, Sparkles, Bot, User } from 'lucide-react';
+import { authFetch } from '../../services/http';
 import './RepoChat.css';
 
-const API_URL = '/api/ai/repo-chat';
+// authFetch (../../services/http) adds the auth header and refreshes an expired
+// access token transparently, so a long open chat keeps working mid-session.
+const API_URL = '/ai/repo-chat';
 
 const SUGGESTIONS = [
   'What does this project do?',
@@ -14,13 +17,6 @@ const SUGGESTIONS = [
   'Which tech stack does it use?',
   'Is it production-ready? What are its weak spots?',
 ];
-
-function getAuthHeaders() {
-  const headers = { 'Content-Type': 'application/json' };
-  const token = localStorage.getItem('gitinsight_token');
-  if (token) headers.Authorization = `Bearer ${token}`;
-  return headers;
-}
 
 /**
  * Consume the server's SSE stream and invoke onContent for every content delta.
@@ -89,9 +85,8 @@ const RepoChat = ({ owner, repo }) => {
     setStreaming(true);
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await authFetch(API_URL, {
         method: 'POST',
-        headers: getAuthHeaders(),
         body: JSON.stringify({ owner, repo, messages: history }),
       });
 
