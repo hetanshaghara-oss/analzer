@@ -23,6 +23,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const githubRoutes = require("./routes/github");
 const oauthRoutes = require("./routes/oauth");
+const { dbFreeRouter: oauthDbFreeRoutes } = oauthRoutes;
 const paymentRoutes = require("./routes/payments");
 const aiRoutes = require("./routes/ai");
 const monitoringRoutes = require("./routes/monitoring");
@@ -98,6 +99,12 @@ app.use("/api/", limiter);
 // database is down or still warming up. optionalAuth tolerates a missing DB by
 // treating the request as unauthenticated.
 app.use("/api/github", githubRoutes);
+
+// OAuth provider list + authorize redirect are DB-free (they read env vars and
+// sign a stateless state token), so mount them before the MongoDB gate like
+// /api/github — the login page keeps showing the right provider buttons and an
+// OAuth sign-in can still start while the database is warming up.
+app.use("/api/auth/oauth", oauthDbFreeRoutes);
 
 // Wait for the database before handling API requests. Prevents Mongoose's
 // query buffering from timing out with cryptic errors (e.g.
