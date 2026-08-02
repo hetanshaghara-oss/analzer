@@ -24,6 +24,7 @@ const userRoutes = require("./routes/users");
 const githubRoutes = require("./routes/github");
 const oauthRoutes = require("./routes/oauth");
 const paymentRoutes = require("./routes/payments");
+const aiRoutes = require("./routes/ai");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -85,8 +86,17 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   message: { message: "Too many requests, please try again later." },
+  // /api/ai has its own stricter limiter (see routes/ai.js), so skip it here —
+  // heavy chat use shouldn't trip the global cap and block unrelated API calls.
+  skip: (req) => req.originalUrl.startsWith("/api/ai"),
 });
 app.use("/api/", limiter);
+
+// AI routes — mounted BEFORE the MongoDB gate on purpose: the repo chat only
+// needs GitHub's API + the LLM, so it keeps working even when the database is
+// down or still warming up. optionalAuth (used inside aiRoutes) tolerates a
+// missing DB by treating the request as unauthenticated.
+app.use("/api/ai", aiRoutes);
 
 // Wait for the database before handling API requests. Prevents Mongoose's
 // query buffering from timing out with cryptic errors (e.g.

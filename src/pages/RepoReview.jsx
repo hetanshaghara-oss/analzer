@@ -10,6 +10,7 @@ import SecurityPanel from '../components/review/SecurityPanel';
 import PerformancePanel from '../components/review/PerformancePanel';
 import RecommendationsList from '../components/review/RecommendationsList';
 import FinalVerdict from '../components/review/FinalVerdict';
+import RepoChat from '../components/review/RepoChat';
 
 const loadingSteps = [
   'Fetching repository metadata...',
@@ -114,6 +115,9 @@ const RepoReview = () => {
       <div className="space-y-6">
         {/* Overview */}
         <RepoOverviewCard repoData={repoData} summary={report.summary} />
+
+        {/* Ask the AI anything about this repo */}
+        <RepoChat owner={username} repo={repo} />
 
         {/* Score + README side by side */}
         <div className="grid grid-cols-1 lg-grid-cols-2 gap-6">
