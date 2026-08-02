@@ -170,33 +170,45 @@ app.use((err, req, res, next) => {
 // MongoDB connection, shared across warm serverless invocations.
 //
 // Promise-based and retryable: `connectDB()` returns the same in-flight promise
-// for every concurrent request, and resets it on failure so the next request
-// makes a fresh attempt. It never rejects — callers get `true` if the DB is
-// ready and `false` otherwise — so fire-and-forget warm-up calls (api/index.js)
-// can't produce unhandled promise rejections. Without all this, a cold Vercel
-// instance whose first connection attempt fails (or is slow) would buffer every
-// DB query for 10s and then fail with "operation.find() buffering timed out
-// after 10000ms".
+// for every concurrent request, and resets it on failure so the next attempt
+// (or next request) can make a fresh connection. It never rejects — callers get
+// `true` if the DB is ready and `false` otherwise — so fire-and-forget warm-up
+// calls (api/index.js) can't produce unhandled promise rejections. Without all
+// this, a cold Vercel instance whose first connection attempt fails (or is
+// slow) would buffer every DB query for 10s and then fail with
+// "operation.find() buffering timed out after 10000ms".
 let dbConnectionPromise = null;
 
 async function connectDB() {
   if (mongoose.connection.readyState === 1) return true;
-  if (!dbConnectionPromise) {
-    dbConnectionPromise = mongoose
-      .connect(MONGODB_URI, {
-        serverSelectionTimeoutMS: 10000,
-        bufferCommands: false,
-      })
-      .then(() => {
-        console.log("✅ MongoDB connected successfully to", MONGODB_URI);
-      })
-      .catch((err) => {
-        console.warn("⚠️ MongoDB connection warning:", err.message);
-        dbConnectionPromise = null; // allow a retry on the next request
-      });
+  // Retry a cold instance's first connection before giving up: on a brand-new
+  // serverless instance the initial Atlas SRV lookup + TLS handshake can exceed
+  // serverSelectionTimeoutMS once and then succeed on the next try (DNS is
+  // cached by then). Without this, the first request on a cold instance gets an
+  // avoidable 503 while the second one works. 3 × 10s is the worst case before
+  // the gate returns 503 for a genuinely unreachable database.
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    if (!dbConnectionPromise) {
+      dbConnectionPromise = mongoose
+        .connect(MONGODB_URI, {
+          serverSelectionTimeoutMS: 10000,
+          bufferCommands: false,
+        })
+        .then(() => {
+          console.log("✅ MongoDB connected successfully to", MONGODB_URI);
+        })
+        .catch((err) => {
+          console.warn(
+            `⚠️ MongoDB connection attempt ${attempt} failed:`,
+            err.message,
+          );
+          dbConnectionPromise = null; // allow a fresh attempt
+        });
+    }
+    await dbConnectionPromise;
+    if (mongoose.connection.readyState === 1) return true;
   }
-  await dbConnectionPromise;
-  return mongoose.connection.readyState === 1;
+  return false;
 }
 
 // Standalone run (node server/index.js): start the server. When this file is
