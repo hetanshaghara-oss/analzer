@@ -11,6 +11,7 @@ import PerformancePanel from '../components/review/PerformancePanel';
 import RecommendationsList from '../components/review/RecommendationsList';
 import FinalVerdict from '../components/review/FinalVerdict';
 import RepoChat from '../components/review/RepoChat';
+import Paywall from '../components/auth/Paywall';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 const loadingSteps = [
@@ -117,10 +118,16 @@ const RepoReview = () => {
         {/* Overview */}
         <RepoOverviewCard repoData={repoData} summary={report.summary} />
 
-        {/* Ask the AI anything about this repo */}
-        <ErrorBoundary>
-          <RepoChat owner={username} repo={repo} />
-        </ErrorBoundary>
+        {/* Ask the AI anything about this repo — Pro-only */}
+        <Paywall
+          required="pro"
+          title="GitInsight AI Chat"
+          message="Ask any question about this repository with GitInsight AI — a Pro feature."
+        >
+          <ErrorBoundary>
+            <RepoChat owner={username} repo={repo} />
+          </ErrorBoundary>
+        </Paywall>
 
         {/* Score + README side by side */}
         <div className="grid grid-cols-1 lg-grid-cols-2 gap-6">

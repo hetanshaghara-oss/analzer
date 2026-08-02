@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// AI Chat — lets users ask questions about any public GitHub repository.
+// AI Chat — lets Pro users ask questions about any public GitHub repository.
 //
 // The route gathers a compact context digest from the repo's real GitHub data
 // (metadata, README, file tree, languages, contributors) and sends it to a
@@ -11,15 +11,18 @@
 // The model's reply is streamed back to the browser as SSE lines:
 //   data: {"content":"..."}\n\n  …  data: [DONE]\n\n
 //
-// This router is mounted BEFORE the MongoDB gate in server/index.js on purpose:
-// the chat only needs GitHub's API + the LLM, so it keeps working even when the
-// database is down or still warming up.
+// Access control: requireAuth + requirePro. Repo context is fetched ONLY with
+// the authenticated user's own GitHub token (never the shared GLOBAL
+// GITHUB_TOKEN), and per-user daily usage is capped (AiUsage) so one account
+// can't run up unbounded LLM spend. This router is mounted AFTER the MongoDB
+// gate in server/index.js because auth + plan + quota all need the database.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
-const { optionalAuth } = require("../middleware/auth");
+const { requireAuth, requirePro } = require("../middleware/auth");
+const AiUsage = require("../models/AiUsage");
 const githubProxy = require("../services/githubProxy");
 
 // LLM configuration (env-driven so it works on Vercel / Render / local).
@@ -33,6 +36,11 @@ const MAX_CONTEXT_CHARS = 14000; // system prompt digest
 const MAX_MESSAGE_CHARS = 4000; // per conversation message
 const MAX_HISTORY = 20; // most recent messages forwarded to the model
 
+// Per-user daily AI chat quota (env-tunable). `tokens` is an estimate
+// (chars / 4). Either cap reached → 429.
+const DAILY_MESSAGE_LIMIT = Number(process.env.AI_DAILY_MESSAGE_LIMIT || 30);
+const DAILY_TOKEN_LIMIT = Number(process.env.AI_DAILY_TOKEN_LIMIT || 100000);
+
 // Chat can be chatty — give it its own slightly looser limit than the global
 // API limiter (the global one skips /api/ai — see server/index.js).
 const chatLimiter = rateLimit({
@@ -43,10 +51,19 @@ const chatLimiter = rateLimit({
   message: { message: "Too many chat requests. Please try again in a moment." },
 });
 router.use(chatLimiter);
-router.use(optionalAuth);
+router.use(requireAuth);
+router.use(requirePro);
 
+// The authenticated user's OWN GitHub token — the AI route never falls back to
+// the shared global GITHUB_TOKEN, so repo context is fetched only with the
+// caller's credentials.
 function effectiveToken(req) {
   return req.user?.githubPat || req.user?.githubAccessToken || null;
+}
+
+// Local-date period key for the per-user daily quota ("2026-08-02").
+function todayPeriod() {
+  return new Date().toISOString().slice(0, 10);
 }
 
 function handleAsync(fn) {
@@ -119,7 +136,35 @@ router.post(
       });
     }
 
+    // The AI route uses ONLY the caller's own GitHub token (never the shared
+    // global GITHUB_TOKEN) — so a GitHub-connected account is required.
     const accessToken = effectiveToken(req);
+    if (!accessToken) {
+      return res.status(400).json({
+        error:
+          "Connect your GitHub account (Account Settings → GitHub) to use the AI repo chat.",
+        code: "GITHUB_NOT_CONNECTED",
+      });
+    }
+
+    // Per-user daily quota — check before doing any GitHub/LLM work so a
+    // user at their cap isn't charged expensive upstream calls.
+    const period = todayPeriod();
+    const usage = await AiUsage.findOne({ userId: req.user._id, period });
+    const usedMessages = usage?.messages || 0;
+    const usedTokens = usage?.tokens || 0;
+    if (usedMessages >= DAILY_MESSAGE_LIMIT) {
+      return res.status(429).json({
+        error: `Daily AI chat limit reached (${DAILY_MESSAGE_LIMIT} messages/day). Try again tomorrow.`,
+        code: "AI_LIMIT_REACHED",
+      });
+    }
+    if (usedTokens >= DAILY_TOKEN_LIMIT) {
+      return res.status(429).json({
+        error: "Daily AI token limit reached. Try again tomorrow.",
+        code: "AI_LIMIT_REACHED",
+      });
+    }
 
     // Gather the repo context server-side so the browser only sends a tiny body.
     const [detail, readmeJson, fileTree, languages, contributors] =
@@ -214,6 +259,7 @@ router.post(
     const reader = upstream.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    let totalDeltaChars = 0;
 
     try {
       for (;;) {
@@ -233,6 +279,7 @@ router.post(
             const parsed = JSON.parse(payload);
             const delta = parsed.choices?.[0]?.delta?.content;
             if (delta) {
+              totalDeltaChars += delta.length;
               res.write(`data: ${JSON.stringify({ content: delta })}\n\n`);
             }
           } catch {
@@ -250,6 +297,20 @@ router.post(
 
     res.write("data: [DONE]\n\n");
     res.end();
+
+    // Count this request toward the user's daily quota (tokens = chars / 4).
+    // Best-effort: if the counter upsert races, the duplicate-key error is
+    // swallowed and the next request still counts.
+    const estimatedTokens = Math.ceil(totalDeltaChars / 4);
+    try {
+      await AiUsage.findOneAndUpdate(
+        { userId: req.user._id, period },
+        { $inc: { messages: 1, tokens: estimatedTokens } },
+        { upsert: true },
+      );
+    } catch (err) {
+      console.warn("[AI chat] usage increment failed:", err.message);
+    }
   }),
 );
 

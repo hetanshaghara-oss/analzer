@@ -92,12 +92,10 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// AI + GitHub routes — mounted BEFORE the MongoDB gate on purpose: the repo
-// chat and the GitHub proxy only need GitHub's API (and, for chat, the LLM),
-// so they keep working even when the database is down or still warming up.
-// optionalAuth (used inside aiRoutes/githubRoutes) tolerates a missing DB by
+// GitHub proxy routes — mounted BEFORE the MongoDB gate on purpose: the repo
+// review page only needs GitHub's API, so it keeps working even when the
+// database is down or still warming up. optionalAuth tolerates a missing DB by
 // treating the request as unauthenticated.
-app.use("/api/ai", aiRoutes);
 app.use("/api/github", githubRoutes);
 
 // Wait for the database before handling API requests. Prevents Mongoose's
@@ -114,6 +112,9 @@ app.use("/api", async (req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/oauth", oauthRoutes);
 app.use("/api/users", userRoutes);
+// AI chat is Pro-only (requireAuth + requirePro + per-user usage quota), so it
+// needs MongoDB and sits behind the gate like the other DB-backed routes.
+app.use("/api/ai", aiRoutes);
 app.use("/api/payments", paymentRoutes);
 
 // Health check

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Payment = require("../models/Payment");
 
 /**
  * Middleware: Verify JWT access token
@@ -56,6 +57,34 @@ const requireRole =
     next();
   };
 
+/**
+ * Middleware: Require a Pro (or Enterprise) plan.
+ * Must run AFTER requireAuth (uses req.user). Admins always pass; everyone
+ * else must have at least one confirmed payment for their account email.
+ */
+const requirePro = async (req, res, next) => {
+  try {
+    if (!req.user)
+      return res.status(401).json({ message: "Not authenticated." });
+    if (
+      req.user.role === "super_admin" ||
+      req.user.role === "company_admin"
+    ) {
+      return next();
+    }
+    const plan = await Payment.accessForEmail(req.user.email);
+    if (plan === "free") {
+      return res.status(403).json({
+        message: "This is a Pro feature. Upgrade to unlock it.",
+        code: "PRO_REQUIRED",
+      });
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
 const optionalAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -77,4 +106,4 @@ const optionalAuth = async (req, res, next) => {
   next();
 };
 
-module.exports = { requireAuth, requireRole, optionalAuth };
+module.exports = { requireAuth, requireRole, requirePro, optionalAuth };
