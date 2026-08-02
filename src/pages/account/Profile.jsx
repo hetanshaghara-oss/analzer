@@ -26,6 +26,27 @@ const Profile = () => {
   } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState("profile");
+
+  // Plan badge — `user.plan` is derived server-side from confirmed payments
+  // for this email (see server/models/Payment.js → accessForEmail).
+  const PLAN_BADGE = {
+    free: {
+      label: "Free",
+      color: "var(--text-secondary)",
+      background: "color-mix(in srgb, var(--text-secondary) 12%, transparent)",
+    },
+    pro: {
+      label: "Pro",
+      color: "#f59e0b",
+      background: "rgba(245,158,11,0.12)",
+    },
+    enterprise: {
+      label: "Enterprise",
+      color: "#8b5cf6",
+      background: "rgba(139,92,246,0.12)",
+    },
+  };
+  const planBadge = PLAN_BADGE[user?.plan] || PLAN_BADGE.free;
   const [form, setForm] = useState({
     name: user?.name || "",
     bio: user?.bio || "",
@@ -392,19 +413,40 @@ const Profile = () => {
                 </div>
                 <div
                   style={{
-                    display: "inline-flex",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
                     marginTop: "0.375rem",
-                    padding: "0.2rem 0.6rem",
-                    background:
-                      "color-mix(in srgb, var(--accent-primary) 12%, transparent)",
-                    color: "var(--accent-primary)",
-                    borderRadius: "9999px",
-                    fontSize: "0.75rem",
-                    fontWeight: 700,
-                    textTransform: "capitalize",
                   }}
                 >
-                  {user?.role}
+                  <span
+                    style={{
+                      padding: "0.2rem 0.6rem",
+                      background:
+                        "color-mix(in srgb, var(--accent-primary) 12%, transparent)",
+                      color: "var(--accent-primary)",
+                      borderRadius: "9999px",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {user?.role}
+                  </span>
+                  <span
+                    title="Your current plan, based on confirmed payments for this email"
+                    style={{
+                      padding: "0.2rem 0.6rem",
+                      background: planBadge.background,
+                      color: planBadge.color,
+                      borderRadius: "9999px",
+                      fontSize: "0.75rem",
+                      fontWeight: 800,
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {planBadge.label}
+                  </span>
                 </div>
                 <div
                   style={{
