@@ -10,6 +10,7 @@ import JobMatch from './pages/JobMatch';
 import CompareDashboard from './pages/CompareDashboard';
 import Leaderboard from './pages/Leaderboard';
 import Wrapped from './pages/Wrapped';
+import MonitorDashboard from './pages/MonitorDashboard';
 // Auth
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -54,6 +55,14 @@ function App() {
           <Route path="/match/:username" element={<JobMatch />} />
           <Route path="/compare" element={<CompareDashboard />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route
+            path="/monitor"
+            element={
+              <ProtectedRoute>
+                <MonitorDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/interview/:username" element={<InterviewSimulator />} />
           <Route
             path="/admin/payments"

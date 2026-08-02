@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Search, GitMerge, Trophy, Moon, Sun, ChevronDown, User, LogOut, Banknote } from 'lucide-react';
+import { Search, GitMerge, Trophy, Moon, Sun, ChevronDown, User, LogOut, Banknote, Radar } from 'lucide-react';
 import { GithubIcon } from '../ui/icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -77,6 +77,12 @@ const Navbar = () => {
             <GitMerge size={15} />
             Compare Profiles
           </Link>
+          {user && (
+            <Link to="/monitor" className="nav-link">
+              <Radar size={15} />
+              Monitor
+            </Link>
+          )}
 
           {user ? (
             <div className="user-menu" ref={menuRef}>

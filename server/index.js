@@ -25,6 +25,7 @@ const githubRoutes = require("./routes/github");
 const oauthRoutes = require("./routes/oauth");
 const paymentRoutes = require("./routes/payments");
 const aiRoutes = require("./routes/ai");
+const monitoringRoutes = require("./routes/monitoring");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -116,6 +117,9 @@ app.use("/api/users", userRoutes);
 // needs MongoDB and sits behind the gate like the other DB-backed routes.
 app.use("/api/ai", aiRoutes);
 app.use("/api/payments", paymentRoutes);
+// Profile monitoring: a user's personal GitHub watchlist with snapshot history,
+// change detection, and activity feeds.
+app.use("/api/monitoring", monitoringRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
