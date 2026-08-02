@@ -99,7 +99,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Load user on mount
+  // Load user on mount. The access token lives only ~15 minutes, so if it has
+  // expired by the time the user reopens the app, `/auth/me` returns 401 and we
+  // must try the long-lived refresh token before logging the user out.
   useEffect(() => {
     const loadUser = async () => {
       if (!token) {
@@ -113,16 +115,32 @@ export const AuthProvider = ({ children }) => {
         if (res.ok) {
           const { user } = await res.json();
           setUser(user);
-        } else {
-          clearTokens();
+          return;
         }
-      } catch {
+
+        // Access token expired or invalid — try the refresh token once.
+        if (await tryRefresh()) {
+          const retry = await fetch(`${API}/auth/me`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("gitinsight_token")}`,
+            },
+          });
+          if (retry.ok) {
+            const { user } = await retry.json();
+            setUser(user);
+            return;
+          }
+        }
         clearTokens();
+      } catch {
+        // Transient network/server error — keep the stored session instead of
+        // silently logging the user out; it will be retried on next mount.
       } finally {
         setLoading(false);
       }
     };
     loadUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const safeJson = async (res) => {
