@@ -92,11 +92,13 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// AI routes — mounted BEFORE the MongoDB gate on purpose: the repo chat only
-// needs GitHub's API + the LLM, so it keeps working even when the database is
-// down or still warming up. optionalAuth (used inside aiRoutes) tolerates a
-// missing DB by treating the request as unauthenticated.
+// AI + GitHub routes — mounted BEFORE the MongoDB gate on purpose: the repo
+// chat and the GitHub proxy only need GitHub's API (and, for chat, the LLM),
+// so they keep working even when the database is down or still warming up.
+// optionalAuth (used inside aiRoutes/githubRoutes) tolerates a missing DB by
+// treating the request as unauthenticated.
 app.use("/api/ai", aiRoutes);
+app.use("/api/github", githubRoutes);
 
 // Wait for the database before handling API requests. Prevents Mongoose's
 // query buffering from timing out with cryptic errors (e.g.
@@ -108,11 +110,10 @@ app.use("/api", async (req, res, next) => {
   res.status(503).json({ message: "Database is warming up. Please try again." });
 });
 
-// Routes
+// Routes that need the database
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/oauth", oauthRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/github", githubRoutes);
 app.use("/api/payments", paymentRoutes);
 
 // Health check
