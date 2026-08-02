@@ -199,12 +199,13 @@ const RepoChat = ({ owner, repo }) => {
                     <ErrorBoundary
                       fallback={<p className="chat-user-text">{m.content}</p>}
                     >
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        className="chat-md"
-                      >
-                        {m.content}
-                      </ReactMarkdown>
+                      {/* react-markdown v10+ dropped the className prop — wrap
+                          in a div; the .chat-md styles target descendants. */}
+                      <div className="chat-md">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {m.content}
+                        </ReactMarkdown>
+                      </div>
                     </ErrorBoundary>
                   ) : (
                     <span className="chat-typing">▍</span>
